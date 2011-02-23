@@ -6,6 +6,10 @@ describe Numeric do
     it "should convert a number to dollars" do
       100.to_money.should == Money.new(10000)
     end
+
+    it "should convert a number to euros" do
+      100.to_money(2, "EUR").should == Money.new(10000, "EUR", 2)
+    end
     
     it "should preserve negative values" do
       -100.to_money.should == Money.new(-10000)
@@ -41,6 +45,10 @@ describe Float do
     it "should use the specified precision" do
       5.055.to_money(2).should == Money.new(506, 'USD', 2)
     end
+
+    it "should convert a number to euros" do
+      100.38.to_money(2, 'EUR').should == Money.new(10038, 'EUR', 2)
+    end
   end
 end
 
@@ -48,6 +56,10 @@ describe String do
   describe "to_money" do
     it "should convert the value to a money object" do
       "4.10".to_money.should == Money.new(410)
+    end
+
+    it "should convert the value to a money object in euros" do
+      "4.10".to_money(2, "EUR").should == Money.new(410, "EUR", 2)
     end
     
     it "should work with out cents" do

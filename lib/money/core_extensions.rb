@@ -4,8 +4,8 @@ class Numeric
   #   100.to_money      #=> #<Money @cents=10000>
   #
   # Takes an optional precision, which defaults to 2
-  def to_money(precision = 2)
-    Money.new(self * 10**precision, Money.default_currency, precision)
+  def to_money(precision = 2, currency = nil)
+    Money.new(self * 10**precision, (currency || Money.default_currency), precision)
   end
 end
 
@@ -16,8 +16,8 @@ class Float
   #
   # It takes an optional precision, which defaults to 2 or the number of digits
   # after the decimal point if it's more than 2.
-  def to_money(precision = nil)
-    to_s.to_money(precision)
+  def to_money(precision = nil, currency = nil)
+    to_s.to_money(precision, currency)
   end
 end
 
@@ -33,10 +33,10 @@ class String
   #
   #   '3.479'.to_money  # => #<Money @cents=3479 @precision=3>
   #
-  def to_money(precision = nil)
+  def to_money(precision = nil, currency = nil)
     # Get the currency
     matches = scan /([A-Z]{2,3})/ 
-    currency = matches[0] ? matches[0][0] : Money.default_currency
+    currency = matches[0] ? matches[0][0] : Money.default_currency if currency.nil?
     
     if !precision
       precision = scan(/\.(\d+)/).to_s.length
